@@ -15,6 +15,8 @@ VIRT_ENVS=~/.virtenvs
 PROJECT_NAME=NAME
 # the root of the project sources
 PROJECT_DIR=~/projects/${PROJECT_NAME}
+# docker-compose command
+DC_CMD=docker-compose
 
 
 function before {
@@ -35,6 +37,14 @@ function start {
 
     # start containers
     docker-compose up
+}
+
+function check_docker_compose {
+
+    if ! [ -x "$(command -v docker-compose)" ]
+    then
+        echo "docker-compose is not installed!"
+    fi
 }
 
 # start
