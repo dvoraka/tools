@@ -43,7 +43,7 @@ function start {
     # check docker-compose
     check_docker_compose_cmd
     # start containers
-    docker-compose up
+    ${DC_CMD} up
 }
 
 function install_docker_compose {
