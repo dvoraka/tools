@@ -64,7 +64,8 @@ function check_virtualenv_cmd {
     if ! [ -x "$(command -v virtualenv)" ]
     then
         echo "virtualenv is not installed!"
-        exit 1
+        echo "You need to install virtualenv package."
+        return 1
     fi
 }
 
