@@ -12,17 +12,17 @@ ENV=docker
 # the root of all virtual environments
 VIRT_ENVS=~/.virtenvs
 # virtual name directory
-ENV_DIR=${VIRT_ENVS}/${ENV}
+ENV_DIR="${VIRT_ENVS}/${ENV}"
 # the project name
 PROJECT_NAME=NAME
 # the root of the project sources
-PROJECT_DIR=~/projects/${PROJECT_NAME}
+PROJECT_DIR="~/projects/${PROJECT_NAME}"
 # docker-compose command
 DC_CMD=docker-compose
 
 
 function before {
-    echo 'Starting servers...'
+    echo ' * Starting servers...'
     # other before tasks
 }
 
@@ -32,30 +32,48 @@ function after {
 }
 
 function start {
+    # check virtual environment
+    check_virtual_env
     # activate the virtual environment
-    source ${ENV_DIR}/bin/activate
+    source "${ENV_DIR}/bin/activate" || exit 1
 
-    cd ${PROJECT_DIR}/docker/
+    # switch to the directory with a configuration
+    cd "${PROJECT_DIR}/docker/" || exit 1
 
+    # check docker-compose
+    check_docker_compose
     # start containers
     docker-compose up
 }
 
-function check_docker_compose {
+function install_docker_compose {
+    echo " * Installing ${DC_CMD}..."
+    pip install "${DC_CMD}"
+    echo "Done."
+}
 
-    if ! [ -x "$(command -v docker-compose)" ]
+function check_docker_compose {
+    if ! [ -x "$(command -v ${DC_CMD})" ]
     then
-        echo "docker-compose is not installed!"
+        echo "${DC_CMD} is not installed!"
+        install_docker_compose
     fi
+}
+
+function create_virtual_env_dir {
+    echo " * Creating virtual env ${ENV_DIR}..."
+    virtualenv "${ENV_DIR}"
+    echo "Done."
 }
 
 function check_virtual_env {
-
-    if ! [ -d ${ENV_DIR}/ ]
+    if ! [ -d "${ENV_DIR}" ]
     then
         echo "Virtual env directory does not exist!"
+        create_virtual_env_dir
     fi
 }
+
 
 # start
 before
