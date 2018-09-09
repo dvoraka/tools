@@ -4,13 +4,15 @@
 #
 # It uses Python virtual environment because of docker-compose installation.
 #
-# version 0.1
+# version 0.2-SNAPSHOT
 #
 
 # the Python virtual environment name with installed docker-compose command
 ENV=docker
 # the root of all virtual environments
 VIRT_ENVS=~/.virtenvs
+# virtual name directory
+ENV_DIR=${VIRT_ENVS}/${ENV}
 # the project name
 PROJECT_NAME=NAME
 # the root of the project sources
@@ -31,7 +33,7 @@ function after {
 
 function start {
     # activate the virtual environment
-    source ${VIRT_ENVS}/${ENV}/bin/activate
+    source ${ENV_DIR}/bin/activate
 
     cd ${PROJECT_DIR}/docker/
 
@@ -44,6 +46,14 @@ function check_docker_compose {
     if ! [ -x "$(command -v docker-compose)" ]
     then
         echo "docker-compose is not installed!"
+    fi
+}
+
+function check_virtual_env {
+
+    if ! [ -d ${ENV_DIR}/ ]
+    then
+        echo "Virtual env directory does not exist!"
     fi
 }
 
