@@ -16,7 +16,7 @@ ENV_DIR="${VIRT_ENVS}/${ENV}"
 # the project name
 PROJECT_NAME=NAME
 # the root of the project sources
-PROJECT_DIR="~/projects/${PROJECT_NAME}"
+PROJECT_DIR=~/projects/${PROJECT_NAME}
 # docker-compose command
 DC_CMD=docker-compose
 
@@ -32,7 +32,7 @@ function after {
 }
 
 function start {
-    # check virtual environment
+    # check the virtual environment
     check_virtual_env
     # activate the virtual environment
     source "${ENV_DIR}/bin/activate" || exit 1
