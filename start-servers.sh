@@ -41,7 +41,7 @@ function start {
     cd "${PROJECT_DIR}/docker/" || exit 1
 
     # check docker-compose
-    check_docker_compose
+    check_docker_compose_cmd
     # start containers
     docker-compose up
 }
@@ -52,7 +52,7 @@ function install_docker_compose {
     echo "Done."
 }
 
-function check_docker_compose {
+function check_docker_compose_cmd {
     if ! [ -x "$(command -v ${DC_CMD})" ]
     then
         echo "${DC_CMD} is not installed!"
@@ -60,8 +60,17 @@ function check_docker_compose {
     fi
 }
 
+function check_virtualenv_cmd {
+    if ! [ -x "$(command -v virtualenv)" ]
+    then
+        echo "virtualenv is not installed!"
+        exit 1
+    fi
+}
+
 function create_virtual_env_dir {
     echo " * Creating virtual env ${ENV_DIR}..."
+    check_virtualenv_cmd || exit 1
     virtualenv "${ENV_DIR}"
     echo "Done."
 }
